@@ -11,9 +11,11 @@
 
 	<div class="quizz_options">
 		<button
+		*ngFor="let option of questionSelected.options; let i = index"
+		(click)="playerChoice( option.alias )"
 		class="btn-option"
 		>
-			optionname
+			{{ option.name }}
 		</button>
 	</div>
 
