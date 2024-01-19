@@ -40,8 +40,7 @@ export class QuizzComponent implements OnInit {
 
 	playerChoice( value: string ) {
 		this.answers.push(value)
-		console.log(this.answers)
-		console.log("test")
+		this.nextStep()
 	}
 
 	async nextStep() {
@@ -50,9 +49,28 @@ export class QuizzComponent implements OnInit {
 		if (this.questionMaxIndex > this.questionIndex) {
 			this.questionSelected = this.questions[this.questionIndex];
 		} else {
+			const finalAnswer: string  = await this.checkResult(this.answers);
 			this.finished = true;
-			// ve
+			this.answerSelected = quizz_questions.results[finalAnswer as keyof typeof quizz_questions.results]
+			// verificar opção ganhadora
+			console.log(this.answers);
 		}
 	}
-
+	// Checks the frequency of a type of item in a list of items.
+	async checkResult(anwsers: string[]) {
+		const result = anwsers.reduce((previous, current, i, arr) => {
+			if (
+				arr.filter(item => item === previous).length >
+				arr.filter(item => item === current).length
+				/* The current item is larger than the previous
+				item if only if the previous items are smaller
+				than the current item. */
+			){
+				return previous
+			} else {
+				return current
+			}
+		})
+		return result
+	}
 }
